@@ -541,8 +541,13 @@ class Canvas(QWidget):
 
         if self.drawing() and not self.prev_point.isNull() and not self.out_of_pixmap(self.prev_point):
             p.setPen(QColor(0, 0, 0))
-            p.drawLine(int(self.prev_point.x()), 0, int(self.prev_point.x()), int(self.pixmap.height()))
-            p.drawLine(0, int(self.prev_point.y()), int(self.pixmap.width()), int(self.prev_point.y()))
+
+            # Use QLineF to avoid float->int overload issues in PyQt
+            p.drawLine(QLineF(self.prev_point.x(), 0,
+                            self.prev_point.x(), self.pixmap.height()))
+            p.drawLine(QLineF(0, self.prev_point.y(),
+                            self.pixmap.width(), self.prev_point.y()))
+
 
         self.setAutoFillBackground(True)
         if self.verified:
