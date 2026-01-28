@@ -530,12 +530,14 @@ class Canvas(QWidget):
         if self.current is not None and len(self.line) == 2:
             left_top = self.line[0]
             right_bottom = self.line[1]
-            rect_width = right_bottom.x() - left_top.x()
-            rect_height = right_bottom.y() - left_top.y()
+
             p.setPen(self.drawing_rect_color)
-            brush = QBrush(Qt.BDiagPattern)
-            p.setBrush(brush)
-            p.drawRect(int(left_top.x()), int(left_top.y()), int(rect_width), int(rect_height))
+            p.setBrush(QBrush(Qt.BDiagPattern))
+
+            rect = QRectF(left_top, right_bottom).normalized()
+            p.drawRect(rect)
+
+        
 
         if self.drawing() and not self.prev_point.isNull() and not self.out_of_pixmap(self.prev_point):
             p.setPen(QColor(0, 0, 0))
